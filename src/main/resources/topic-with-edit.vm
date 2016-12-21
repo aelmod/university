@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<a href="/">Main</a>
+<h1>$topic.title</h1><br><br>
+<form action="" name="edit-topic" method="post" style="width: 80%">
+    <div contenteditable="true" id="content">$topic.text</div>
+    <input type="hidden" name="text" id="topic-text">
+</form>
+
+<script src="/ckeditor/ckeditor.js"></script>
+<script>
+    CKEDITOR.inline('content').on('blur', function () {
+        document.getElementById("topic-text").value = document.getElementById("content").innerHTML;
+    document.forms["edit-topic"].submit()
+    });
+</script>
+</body>
+</html>

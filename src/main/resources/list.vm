@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<button onclick="location.href='/add'" type="button">Add</button>
+<form action="">
+    <input type="text" name="search"
+        #if ($searchData)
+           value="$searchData"
+        #end>
+    <button type="submit">search</button>
+    <button onclick="location.href='/'" type="button">reset</button>
+</form>
+    #foreach( $topic in $topics)
+    <a href="topic/$topic.id">$topic.title</a><br>
+    #end
+
+</body>
+</html>
