@@ -15,7 +15,7 @@ public class App {
     public static void main(String[] args) throws SQLException {
         port(80);
         JdbcDataSource jdbcDataSource = new JdbcDataSource();
-        jdbcDataSource.setUrl("jdbc:h2:~/university/ziiks");
+        jdbcDataSource.setUrl("jdbc:h2:~/university/oop");
         Connection connection = jdbcDataSource.getConnection();
         connection.createStatement().execute("CREATE TABLE IF NOT EXISTS topic(id INTEGER AUTO_INCREMENT PRIMARY KEY, title LONGTEXT, text LONGTEXT)");
         //connection.createStatement().execute("INSERT INTO topic VALUES (NULL, 'fraza', 'imya')");
