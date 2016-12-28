@@ -1,7 +1,13 @@
+import org.eclipse.jetty.server.Server;
 import org.h2.jdbcx.JdbcDataSource;
 import spark.ModelAndView;
+import spark.Service;
+import spark.Spark;
+import spark.embeddedserver.jetty.EmbeddedJettyServer;
 import spark.template.velocity.VelocityTemplateEngine;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,9 +19,25 @@ import static spark.Spark.*;
 
 public class App {
     public static void main(String[] args) throws SQLException {
-        port(80);
+        new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+                Method getInstance = Spark.class.getDeclaredMethod("getInstance");
+                getInstance.setAccessible(true);
+                Service sparkService = (Service) getInstance.invoke(Spark.class);
+                Field aServerField = Service.class.getDeclaredField("server");
+                aServerField.setAccessible(true);
+                EmbeddedJettyServer absrtactServer = (EmbeddedJettyServer) aServerField.get(sparkService);
+                Field jettyServer = EmbeddedJettyServer.class.getDeclaredField("server");
+                jettyServer.setAccessible(true);
+                Server server = (Server) jettyServer.get(absrtactServer);
+                server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", -1);
+            } catch (Exception e) {
+            }
+        }).start();
+        //port(80);
         JdbcDataSource jdbcDataSource = new JdbcDataSource();
-        jdbcDataSource.setUrl("jdbc:h2:~/university/oop");
+        jdbcDataSource.setUrl("jdbc:h2:~/university/stzi");
         Connection connection = jdbcDataSource.getConnection();
         connection.createStatement().execute("CREATE TABLE IF NOT EXISTS topic(id INTEGER AUTO_INCREMENT PRIMARY KEY, title LONGTEXT, text LONGTEXT)");
         //connection.createStatement().execute("INSERT INTO topic VALUES (NULL, 'fraza', 'imya')");
